@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start index.js",
+    "start": "pm2 restart index.js",
     "dev": "cross-env NODE_ENV=develop nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
