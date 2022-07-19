@@ -37,6 +37,7 @@ const proxyHeader = (req, key) => {
 
 app.all("/api", async (req, res) => {
   try {
+    const options = req.body.options;
     const destination = proxyHeader(req, "url");
 
     if (!destination) {
@@ -50,6 +51,7 @@ app.all("/api", async (req, res) => {
       url: destination,
       method: req.method,
       data: req.body,
+      responseType: options.responseType,
     };
 
     const resp = await axios(config);
