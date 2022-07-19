@@ -64,7 +64,7 @@ app.all("/api", async (req, res) => {
 
     logger.info({
       axiosConfig: config,
-      response: data,
+      response: data.length > 200 ? "Too Large String" : data,
     });
     res.json(data);
   } catch (err) {
