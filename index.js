@@ -62,6 +62,10 @@ app.all("/api", async (req, res) => {
 
     const data = isXml ? await util.xml2json(resp.data) : resp.data;
 
+    logger.info({
+      axiosConfig: config,
+      response: data,
+    });
     res.json(data);
   } catch (err) {
     const isJson = typeof err.toJSON === "function";
