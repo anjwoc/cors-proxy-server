@@ -54,13 +54,15 @@ app.all("/api", async (req, res) => {
 
     const resp = await axios(config);
     const isXml = resp.headers["content-type"].includes("application/xml");
-    const json = {
-      status: resp.status,
-      statusText: resp.statusText,
-      data: isXml ? await util.xml2json(resp.data) : resp.data,
-    };
+    // const json = {
+    //   status: resp.status,
+    //   statusText: resp.statusText,
+    //   data: isXml ? await util.xml2json(resp.data) : resp.data,
+    // };
 
-    res.json(json);
+    const data = isXml ? await util.xml2json(resp.data) : resp.data;
+
+    res.json(data);
   } catch (err) {
     const isJson = typeof err.toJSON === "function";
     const resp = isJson ? err.toJSON : err;
