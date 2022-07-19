@@ -23,6 +23,7 @@ const logger = pino({
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+app.use(express.json());
 
 const prefix = "target-";
 const proxyHeader = (req, key) => {
@@ -51,16 +52,11 @@ app.all("/api", async (req, res) => {
       url: destination,
       method: req.method,
       data: req.body,
-      responseType: options.responseType,
+      responseType: "arraybuffer",
     };
 
     const resp = await axios(config);
     const isXml = resp.headers["content-type"].includes("application/xml");
-    // const json = {
-    //   status: resp.status,
-    //   statusText: resp.statusText,
-    //   data: isXml ? await util.xml2json(resp.data) : resp.data,
-    // };
 
     const data = isXml ? await util.xml2json(resp.data) : resp.data;
 
@@ -68,7 +64,9 @@ app.all("/api", async (req, res) => {
       axiosConfig: config,
       response: data.length > 200 ? "Too Large String" : data,
     });
-    res.send(data);
+
+    const base64 = Buffer.from(data, "binary").toString("base64");
+    res.send(base64);
   } catch (err) {
     const isJson = typeof err.toJSON === "function";
     const resp = isJson ? err.toJSON : err;
