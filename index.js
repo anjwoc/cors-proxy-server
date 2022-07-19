@@ -66,7 +66,7 @@ app.all("/api", async (req, res) => {
       axiosConfig: config,
       response: data.length > 200 ? "Too Large String" : data,
     });
-    res.json(data);
+    res.send(data);
   } catch (err) {
     const isJson = typeof err.toJSON === "function";
     const resp = isJson ? err.toJSON : err;
